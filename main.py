@@ -28,6 +28,8 @@ from statsmodels.tsa.stattools import adfuller
 # Librerias para BackTest
 from IPython import display
 # Importar Data y Funciones
+import functins as fn
+import data as dt
 from data import *
 from functions import *
 
@@ -72,14 +74,7 @@ plt.show()
 
 # relacion Lineal entre las observaciones y la distancia de tiempo k de los rezagos
 # Lo haremos con un rezago
-k = 1  # Rezagos
-Y_test = df['Actual'].mean()
-Y_tk = df['Actual'].shift(k)
-rk = (sum((df['Actual'][k:len(df)]-Y_test)*(Y_tk[k:len(df)]-Y_test)))/(sum((df['Actual']-Y_test)**2))
-
-# relacion entre la serie y los k rezagos de si misma.
-# Lo haremos con un rezago
-rkk = rk
+fn.relacion_lineal()
 
 # https://towardsdatascience.com/heteroscedasticity-is-nothing-to-be-afraid-of-730dd3f7ca1f
 

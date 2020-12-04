@@ -59,9 +59,25 @@ def Datos_Semana(Fecha_Comunicado,mins1,mins2,granu):
     Df_historico_Semana['Mid'] = (Df_historico_Semana['High'] + Df_historico_Semana['Low'])/2
     return Df_historico_Semana
 
+def relacion_lineal(k,df,rk):
+    k = 1  # Rezagos
+    Y_test = df['Actual'].mean()
+    Y_tk = df['Actual'].shift(k)
+    rk = (sum((df['Actual'][k:len(df)]-Y_test)*(Y_tk[k:len(df)]-Y_test)))/(sum((df['Actual']-Y_test)**2))
+# relacion entre la serie y los k rezagos de si misma.
+# Lo haremos con un rezago
+    return rk
+
+# https://towardsdatascience.com/heteroscedasticity-is-nothing-to-be-afraid-of-730dd3f7ca1f
+def prueba_heros(df): 
+    df2 = df
+    df2 = df2.set_index('DateTime')
+    df2['Time_Period'] = range(1, len(df2)+1)
+    df2['LOG_Actual'] = np.log(df2['Actual'])
+    return df2
 
 # Crear df Backtest
-# Esta función Usa los parametros de Take Profit, Stop Loss y Volumen y va iterando para calcular la ganancia
+# Esta función Usa los  parametros de Take Profit, Stop Loss y Volumen y va iterando para calcular la ganancia
 def fun_opt_ganacia_fundamental(df_backtest,vol,tp,st):
     df_backtest['Operación'] = df_backtest['Clasificación'].apply(lambda x: 'venta' if (x == 'A' or x == 'C') else 'compra')
     df_backtest['Volumen'] = vol*100 # Consideramos apalancamiento 100 a 1 para poder hacer esto.
